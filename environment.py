@@ -1,14 +1,12 @@
+from typing import Any
+
 import gymnasium as gym
 import highway_env
 
-
-# Name of the Highway-Env environment
-ENV_NAME = "highway-v0"
+from config import ENV_NAME
 
 
-# Environment configuration
-# This defines the observation/state space, action space, and reward settings.
-ENV_CONFIG = {
+ENV_CONFIG: dict[str, Any] = {
     "observation": {
         "type": "Kinematics",
         "vehicles_count": 5,
@@ -19,14 +17,11 @@ ENV_CONFIG = {
     "action": {
         "type": "DiscreteMetaAction",
     },
-
-    # Highway settings
-    "lanes_count": 4,
-    "vehicles_count": 50,
-    "duration": 40,
-
-    # Reward function components
-    # The agent is rewarded for speed and punished for unsafe behavior.
+    "lanes_count": 3,
+    "vehicles_count": 8,
+    "duration": 20,
+    "simulation_frequency": 5,
+    "policy_frequency": 1,
     "collision_reward": -5.0,
     "high_speed_reward": 1.0,
     "right_lane_reward": 0.1,
@@ -36,9 +31,8 @@ ENV_CONFIG = {
 }
 
 
-# States observed by the agent
-STATES_DESCRIPTION = {
-    "presence": "Indicates whether a vehicle exists in the observation.",
+STATES_DESCRIPTION: dict[str, str] = {
+    "presence": "Indicates whether a nearby vehicle exists in the observation.",
     "x": "Relative longitudinal position of the vehicle.",
     "y": "Relative lateral or lane position of the vehicle.",
     "vx": "Relative longitudinal speed of the vehicle.",
@@ -46,74 +40,51 @@ STATES_DESCRIPTION = {
 }
 
 
-# Actions available to the agent
-ACTIONS_DESCRIPTION = {
+ACTIONS_DESCRIPTION: dict[int, str] = {
     0: "LANE_LEFT: Move to the left lane.",
-    1: "IDLE: Keep the same lane and behavior.",
+    1: "IDLE: Keep the current lane and speed.",
     2: "LANE_RIGHT: Move to the right lane.",
     3: "FASTER: Increase speed.",
     4: "SLOWER: Decrease speed.",
 }
 
 
-def create_environment(render_mode=None):
-    """
-    Create and configure the highway-v0 environment.
+def create_environment(render_mode: str | None = None) -> gym.Env:
+    """Create and configure the Highway-Env environment.
 
-    The environment represents a multi-lane highway where the ego vehicle
-    learns to drive safely, maintain good speed, and avoid unsafe behavior.
+    render_mode must stay None during training for speed.
+    Use render_mode="rgb_array" only when recording videos.
     """
-
     env = gym.make(ENV_NAME, render_mode=render_mode)
     env.unwrapped.configure(ENV_CONFIG)
     env.reset()
-
     return env
 
 
 def calculate_initial_reward(
-    speed,
-    collision=False,
-    off_road=False,
-    unnecessary_lane_change=False
-):
-    """
-    Initial reward function for the autonomous driving agent.
-
-    Reward formula:
-        R = alpha * speed
-            - beta * collision
-            - gamma * off_road
-            - delta * unnecessary_lane_change
-
-    The reward function encourages the agent to drive at a good speed,
-    while penalizing crashes, going off-road, and unnecessary lane changes.
-    """
-
-    alpha = 1.0    # speed reward weight
-    beta = 5.0     # collision penalty weight
-    gamma = 3.0    # off-road penalty weight
-    delta = 0.2    # unnecessary lane-change penalty weight
+    speed: float,
+    collision: bool = False,
+    off_road: bool = False,
+    unnecessary_lane_change: bool = False,
+) -> float:
+    """Example reward equation used for the methodology explanation."""
+    alpha = 1.0
+    beta = 5.0
+    gamma = 3.0
+    delta = 0.2
 
     reward = alpha * speed
-
     if collision:
         reward -= beta
-
     if off_road:
         reward -= gamma
-
     if unnecessary_lane_change:
         reward -= delta
-
     return reward
 
 
-def print_environment_info():
-    """
-    Print states, actions, and reward function information.
-    """
-
+def print_environment_info() -> None:
+    """Print states, actions, and reward-function information."""
     print("Environment:", ENV_NAME)
 
     print("\nStates:")
@@ -126,31 +97,14 @@ def print_environment_info():
 
     print("\nReward Function:")
     print("R = alpha * speed - beta * collision - gamma * off_road - delta * lane_change")
-    print("alpha = 1.0")
-    print("beta = 5.0")
-    print("gamma = 3.0")
-    print("delta = 0.2")
+    print("alpha = 1.0, beta = 5.0, gamma = 3.0, delta = 0.2")
 
 
 if __name__ == "__main__":
-    env = create_environment()
-
+    test_env = create_environment()
     print("Environment created successfully.")
     print_environment_info()
-
-    observation, info = env.reset()
-
-    print("\nInitial observation shape:")
-    print(observation.shape)
-
-    sample_reward = calculate_initial_reward(
-        speed=25,
-        collision=False,
-        off_road=False,
-        unnecessary_lane_change=False
-    )
-
-    print("\nSample reward for safe driving at speed 25:")
-    print(sample_reward)
-
-    env.close()
+    observation, _ = test_env.reset()
+    print("\nInitial observation shape:", observation.shape)
+    print("Sample reward:", calculate_initial_reward(speed=25))
+    test_env.close()

@@ -1,0 +1,9 @@
+Highway-Env PPO Training Summary
+================================
+Device: cuda
+Total timesteps: 20000
+Elapsed seconds: 407.96
+Approx FPS: 49.02
+Episodes recorded: 1227
+Average episode reward: 13.85
+Best episode reward: 18.98

@@ -1,0 +1,14 @@
+Use these commands from the project folder while your .venv is active:
+
+1) Check current GPU status:
+python check_gpu.py
+
+2) If CUDA available is False and you have an NVIDIA GPU, install CUDA PyTorch inside the .venv:
+pip uninstall torch torchvision torchaudio -y
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+3) Check again:
+python check_gpu.py
+
+Important note:
+For this project, PPO with MlpPolicy and Highway-Env often trains faster on CPU than GPU because the environment simulation is the slow part. The patched code still uses CUDA automatically when PyTorch detects it.
