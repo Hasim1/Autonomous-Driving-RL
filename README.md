@@ -4,10 +4,10 @@ This repository contains the final project for training an autonomous driving ag
 The agent learns to navigate a highway safely and efficiently.
 
 ##  Team Members & Roles
-* **Nour El-Din**: Environment Setup & Reward Function Design
-* **Adnan**: Model Training (PPO)
-* **Fadel**: Evaluation, Video Generation & Graphs
-* **Hashim**: GitHub Repository Management & Documentation
+* **•	Noor aldeen abuzannad  - 2105678 **: Environment Setup & Reward Function Design
+* **•	Adnan Azizia           - 2017206 **: Model Training (PPO)
+* **•	Fadhl al-fadhili       - 2363825  **: Evaluation, Video Generation & Graphs
+* **•	Hashim ALtabatabee     - 2105338 **: GitHub Repository Management & Documentation
 
 ---
 
@@ -41,7 +41,17 @@ Here is the graph showing how the agent's reward increased over time:
 ![Reward Graph](assets/reward_plot.png)
 
 ### Agent Behavior (Untrained vs. Fully Trained)
-> ⏳ **Coming Soon:** GIFs showing the car's driving behavior before and after training will be added here shortly by the evaluation team.
+### Agent Behavior (Untrained vs. Fully Trained)
+
+**1. Untrained Agent (Before Training)**
+The car moves randomly, makes poor decisions, and frequently crashes.
+
+<video src="assets/untrained0.mp4" controls="controls" width="100%"></video>
+
+**2. Fully Trained Agent (After Training)**
+The car drives smoothly, changes lanes smartly to avoid traffic, and maintains a high optimal speed!
+
+<video src="assets/fully_trained0.mp4" controls="controls" width="100%"></video>
 
 ---
 
