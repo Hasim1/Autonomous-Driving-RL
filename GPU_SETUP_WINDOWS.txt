@@ -1,5 +1,8 @@
 Use these commands from the project folder while your .venv is active:
 
+0) To get into .venv state:
+(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& d:\GitHub\Autonomous-Driving-RL\.venv\Scripts\Activate.ps1)
+
 1) Check current GPU status:
 python check_gpu.py
 
